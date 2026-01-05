@@ -18,44 +18,76 @@ var btn_attack_pressed = keyboard_check_pressed(ord("X")) || (gp_connected && (g
 // === RIDING PLATFORM (oBoss) ===
 var riding_boss = noone;
 
-// Проверяем, стоим ли мы СВЕРХУ на боссе
-var boss_below = instance_place(x, y + 1, oBoss);
-if (boss_below != noone) {
-    if (bbox_bottom <= boss_below.bbox_top + 2) {
-        riding_boss = boss_below;
+// Если игрок неуязвим — он не может стоять на боссе, проваливается сквозь
+if (!invulnerable) {
+    // Проверяем, стоим ли мы СВЕРХУ на боссе
+    var boss_below = instance_place(x, y + 1, oBoss);
+    if (boss_below != noone) {
+        if (bbox_bottom <= boss_below.bbox_top + 2) {
+            riding_boss = boss_below;
+        }
     }
 }
 
 // Если едем на боссе — передаём его движение
 if (riding_boss != noone) {
-    x += riding_boss.delta_x;
-    y += riding_boss.delta_y;
+    var new_x = x + riding_boss.delta_x;
+    var new_y = y + riding_boss.delta_y;
     
-    // Корректируем если толкает в стену
-    if (place_meeting(x, y, oSolid)) {
-        x -= riding_boss.delta_x;
-        while (place_meeting(x, y, oSolid)) {
-            x -= sign(riding_boss.delta_x);
+    // Проверяем, не раздавит ли нас о потолок/стену
+    var would_be_crushed = place_meeting(new_x, new_y, oSolid);
+    
+    if (would_be_crushed) {
+        // Раздавливание — получаем урон!
+        if (!invulnerable) {
+            hp -= 1;
+            invulnerable = true;
+            invulnerable_timer = invulnerable_duration;
+        }
+        // Сбрасываем езду — проваливаемся сквозь босса
+        riding_boss = noone;
+        was_riding_boss = noone;
+    } else {
+        // Безопасно двигаемся с боссом
+        x = new_x;
+        y = new_y;
+        
+        // Корректируем если толкает в стену по X
+        if (place_meeting(x, y, oSolid)) {
+            x -= riding_boss.delta_x;
+            while (place_meeting(x, y, oSolid)) {
+                x -= sign(riding_boss.delta_x);
+            }
         }
     }
 }
 
 // === ВЫТАЛКИВАНИЕ ИЗ БОССА ===
-// Если оказались внутри босса — выталкиваем наверх
-var boss_overlap = instance_place(x, y, oBoss);
-if (boss_overlap != noone) {
-    // Проверяем: мы падаем ИЛИ были на боссе в прошлом кадре
-    var should_push_up = (ysp >= 0) || (was_riding_boss == boss_overlap);
-    
-    // И наш центр выше центра босса (мы сверху, а не сбоку/снизу)
-    var player_center_y = (bbox_top + bbox_bottom) / 2;
-    var boss_center_y = (boss_overlap.bbox_top + boss_overlap.bbox_bottom) / 2;
-    
-    if (should_push_up && player_center_y < boss_center_y) {
-        // Выталкиваем на верх босса
-        y = boss_overlap.bbox_top - (bbox_bottom - y);
-        ysp = 0;
-        riding_boss = boss_overlap;
+// Только если НЕ неуязвим (иначе проваливаемся сквозь)
+if (!invulnerable) {
+    var boss_overlap = instance_place(x, y, oBoss);
+    if (boss_overlap != noone) {
+        var should_push_up = (ysp >= 0) || (was_riding_boss == boss_overlap);
+        
+        var player_center_y = (bbox_top + bbox_bottom) / 2;
+        var boss_center_y = (boss_overlap.bbox_top + boss_overlap.bbox_bottom) / 2;
+        
+        if (should_push_up && player_center_y < boss_center_y) {
+            // Проверяем, не раздавит ли выталкивание нас в потолок
+            var push_y = boss_overlap.bbox_top - (bbox_bottom - y);
+            if (!place_meeting(x, push_y, oSolid)) {
+                y = push_y;
+                ysp = 0;
+                riding_boss = boss_overlap;
+            } else {
+                // Раздавливание при выталкивании
+                if (!invulnerable) {
+                    hp -= 1;
+                    invulnerable = true;
+                    invulnerable_timer = invulnerable_duration;
+                }
+            }
+        }
     }
 }
 
