@@ -1,6 +1,8 @@
 // STEP oBoss
-grounded = place_meeting(x, y + 1, oSolid);
+prev_x = x;
+prev_y = y;
 
+grounded = place_meeting(x, y + 1, oSolid);
 
 collide_x = false
 
@@ -22,6 +24,9 @@ if (place_meeting(x, y + vsp, oSolid)) {
 } else {
     y += vsp;
 }
+
+delta_x = x - prev_x;
+delta_y = y - prev_y;
 
 switch (state) {
     case BOSS_STATE.IDLE:

@@ -1,4 +1,6 @@
 // CREATE oBoss
+event_inherited()
+
 max_hp = 6;
 hp = max_hp;
 facing = 1;
@@ -6,12 +8,12 @@ facing = 1;
 idle_delay = 60;
 
 jump_count_max = 3;
-jump_hspeed = 4;
-jump_vspeed = -16;
-jump_gravity = 0.2;
+jump_hspeed = 1;
+jump_vspeed = -3;
+jump_gravity = 0.1;
 jump_delay = 30;
 
-dash_speed = 14;
+dash_speed = 6;
 dash_stun_time = 20
 
 
@@ -21,6 +23,10 @@ grounded = false;
 
 collide_x = false
 
+prev_x = x;
+prev_y = y;
+delta_x = 0;
+delta_y = 0;
 
 // FSM состояния
 enum BOSS_STATE {

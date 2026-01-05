@@ -46,8 +46,7 @@ invulnerable_duration = 60;
 
 inventory = false;
 
-
-
+was_riding_boss = noone;
 
 shoot = function () {
     var offset = facing_x ? -8 : 8 // TODO: 8 заменить на растояние откуда вылетает пуля
