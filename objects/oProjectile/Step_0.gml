@@ -8,5 +8,5 @@ x += hsp * sp;
 y += vsp * sp;
 
 if (place_meeting(x, y, oSolid)) {
-//    instance_destroy();
+    instance_destroy();
 }

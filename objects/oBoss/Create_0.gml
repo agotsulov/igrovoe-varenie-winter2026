@@ -5,18 +5,6 @@ max_hp = 6;
 hp = max_hp;
 facing = 1;
 
-idle_delay = 60;
-
-jump_count_max = 3;
-jump_hspeed = 1;
-jump_vspeed = -3;
-jump_gravity = 0.1;
-jump_delay = 30;
-
-dash_speed = 6;
-dash_stun_time = 20
-
-
 vsp = 0;
 hsp = 0;
 grounded = false;
@@ -35,14 +23,42 @@ enum BOSS_STATE {
     DASH_ATTACK,
     STUNNED,
 	STUNNED_JUMP,
+    FLY_UP,     
+    CHASE,       
+    FALLING,   
+	STUNNED_FALLING,
 }
+
+idle_delay = 60;
 
 state = BOSS_STATE.IDLE;
 state_timer = idle_delay;
 
+jump_count_max = 3;
+jump_hspeed = 1;
+jump_vspeed = -3.5;
+jump_gravity = 0.1;
+jump_delay = 10;
+
+//dash_speed = 6;
+//dash_stun_time = 20
+
 // Переменные атак
 jump_count = 0;
 jump_landed = false;
+
+fly_up_speed = -4;
+
+// Dash атака
+dash_accel = 0.2;         // Ускорение
+dash_max_speed = 6;       // Максимальная скорость
+dash_stun_time = 20;
+
+// Преследование
+chase_accel = 0.2;         // Ускорение
+chase_max_speed = 4;       // Максимальная скорость
+chase_duration = 90;
+chase_friction = 0.85;     // Трение при смене направления
 
 current_attack_index = 0;
 attacks = [BOSS_STATE.JUMP_ATTACK, BOSS_STATE.DASH_ATTACK];
@@ -71,12 +87,10 @@ boss_change_state = function(_new_state) {
 				if (facing == 0) facing = 1;
 			}
 			
-            hsp = dash_speed * facing;
             vsp = 0;
             break;
             
         case BOSS_STATE.STUNNED:
-			show_debug_message("STUNNED")
             state_timer = dash_stun_time;
             hsp = 0;
 			boss_do_proj()
@@ -84,7 +98,28 @@ boss_change_state = function(_new_state) {
 			break;
 		
 		case BOSS_STATE.STUNNED_JUMP:
-			show_debug_message("STUNNED")
+            state_timer = dash_stun_time;
+            hsp = 0;
+			boss_do_proj()
+			break;
+		
+		case BOSS_STATE.FLY_UP:
+			hsp = 0;
+			vsp = fly_up_speed;
+			break;
+
+		case BOSS_STATE.CHASE:
+			state_timer = chase_duration;
+			vsp = 0;
+			break;
+
+		case BOSS_STATE.FALLING:
+			hsp = 0;
+			// vsp сохраняется или можно обнулить
+			break;
+			
+		
+		case BOSS_STATE.STUNNED_FALLING:
             state_timer = dash_stun_time;
             hsp = 0;
 			boss_do_proj()
@@ -93,7 +128,7 @@ boss_change_state = function(_new_state) {
 }
 
 boss_do_proj = function() {
-	var proj = instance_create_depth(irandom_range(180, 580), 440, depth + 1, oProjectile);
+	var proj = instance_create_depth(irandom_range(24, 294), 24, depth + 1, oRock);
   
 	proj.vsp = 1;	
 	

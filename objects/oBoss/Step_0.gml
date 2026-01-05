@@ -67,16 +67,22 @@ switch (state) {
         break;
     
     case BOSS_STATE.DASH_ATTACK:
-        if (collide_x) {
-            boss_change_state(BOSS_STATE.STUNNED);
-        }
+        // Ускоряемся в направлении facing
+		hsp += dash_accel * facing;
+    
+		// Ограничиваем максимальную скорость
+		hsp = clamp(hsp, -dash_max_speed, dash_max_speed);
+    
+		// Врезались в стену
+		if (collide_x) {
+			boss_change_state(BOSS_STATE.STUNNED);
+		}
         break;
 		
 	case BOSS_STATE.STUNNED:
 		state_timer--;
         if (state_timer <= 0) {
-			boss_change_state(BOSS_STATE.JUMP_ATTACK);
-            //boss_next_attack();
+			boss_change_state(BOSS_STATE.FLY_UP);
         }
 		break;
 	
@@ -84,7 +90,51 @@ switch (state) {
 		state_timer--;
         if (state_timer <= 0) {
 			boss_change_state(BOSS_STATE.DASH_ATTACK);
-            //boss_next_attack();
+        }
+		break;
+		
+	case BOSS_STATE.FLY_UP:
+		if (place_meeting(x, y - 1, oSolid)) {
+		    vsp = 0;
+		    boss_change_state(BOSS_STATE.CHASE);
+		}
+		break;
+
+	case BOSS_STATE.CHASE:
+	    var _player = instance_nearest(x, y, oPlayer);
+	    if (_player != noone) {
+	        var dir_to_player = sign(_player.x - x);
+	        if (dir_to_player != sign(hsp) && hsp != 0) {
+	            hsp *= chase_friction;
+	        }
+	        hsp += chase_accel * dir_to_player;
+	        if (dir_to_player != 0) facing = dir_to_player;
+	    }
+    
+	    hsp = clamp(hsp, -chase_max_speed, chase_max_speed);
+    
+	    state_timer--;
+	    if (state_timer <= 0) {
+	        hsp = 0;
+	        boss_change_state(BOSS_STATE.FALLING);
+	    }
+	    break;
+
+	case BOSS_STATE.FALLING:
+	    vsp += jump_gravity;
+    
+	    if (grounded && vsp >= 0) {
+	        vsp = 0;
+	        hsp = 0;
+	        boss_change_state(BOSS_STATE.STUNNED_FALLING);  
+	    }
+	    break;
+		
+		
+	case BOSS_STATE.STUNNED_FALLING:
+		state_timer--;
+        if (state_timer <= 0) {
+			boss_change_state(BOSS_STATE.JUMP_ATTACK);
         }
 		break;
 }
