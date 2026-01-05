@@ -24,7 +24,7 @@
   },
   "name":"IgorVarWinter2026",
   "resources":[
-    {"id":{"name":"oBoss","path":"objects/oBoss/oBoss.yy",},},
+    {"id":{"name":"oBoss1","path":"objects/oBoss1/oBoss1.yy",},},
     {"id":{"name":"oBullet","path":"objects/oBullet/oBullet.yy",},},
     {"id":{"name":"oEnemy","path":"objects/oEnemy/oEnemy.yy",},},
     {"id":{"name":"oPickable","path":"objects/oPickable/oPickable.yy",},},

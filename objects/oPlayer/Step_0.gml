@@ -21,7 +21,7 @@ var riding_boss = noone;
 // Если игрок неуязвим — он не может стоять на боссе, проваливается сквозь
 if (!invulnerable) {
     // Проверяем, стоим ли мы СВЕРХУ на боссе
-    var boss_below = instance_place(x, y + 1, oBoss);
+    var boss_below = instance_place(x, y + 1, oBoss1);
     if (boss_below != noone) {
         if (bbox_bottom <= boss_below.bbox_top + 2) {
             riding_boss = boss_below;
@@ -65,7 +65,7 @@ if (riding_boss != noone) {
 // === ВЫТАЛКИВАНИЕ ИЗ БОССА ===
 // Только если НЕ неуязвим (иначе проваливаемся сквозь)
 if (!invulnerable) {
-    var boss_overlap = instance_place(x, y, oBoss);
+    var boss_overlap = instance_place(x, y, oBoss1);
     if (boss_overlap != noone) {
         var should_push_up = (ysp >= 0) || (was_riding_boss == boss_overlap);
         
@@ -192,7 +192,7 @@ if (ysp != 0) {
     // Проверяем босса (только при падении!)
     var hit_boss = false;
     if (ysp > 0) {  // Только когда падаем вниз
-        var boss_check = instance_place(x, y + ysp, oBoss);
+        var boss_check = instance_place(x, y + ysp, oBoss1);
         if (boss_check != noone && bbox_bottom <= boss_check.bbox_top + ysp) {
             hit_boss = true;
         }
@@ -206,8 +206,8 @@ if (ysp != 0) {
         ysp = 0;
     } else if (hit_boss) {
         // Приземляемся на босса
-        var boss_inst = instance_place(x, y + ysp, oBoss);
-        while (!place_meeting(x, y + 1, oBoss)) {
+        var boss_inst = instance_place(x, y + ysp, oBoss1);
+        while (!place_meeting(x, y + 1, oBoss1)) {
             y += 1;
         }
         is_jumping = false;

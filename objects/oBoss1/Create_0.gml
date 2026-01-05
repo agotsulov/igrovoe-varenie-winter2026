@@ -35,7 +35,7 @@ state = BOSS_STATE.IDLE;
 state_timer = idle_delay;
 
 jump_count_max = 3;
-jump_hspeed = 1;
+jump_hspeed = 2;
 jump_vspeed = -3.5;
 jump_gravity = 0.1;
 jump_delay = 10;
