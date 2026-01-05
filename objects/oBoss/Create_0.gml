@@ -1,3 +1,4 @@
+// CREATE oBoss
 max_hp = 6;
 hp = max_hp;
 facing = 1;
