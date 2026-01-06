@@ -23,28 +23,47 @@ target_pupil_y += pupil_offset_y;
 pupil_x = lerp(pupil_x, target_pupil_x, follow_speed);
 pupil_y = lerp(pupil_y, target_pupil_y, follow_speed);
 
-if (instance_exists(oBoss1)) {
-	i = instance_nearest(x,y, oBoss1)
-	image_index = 0
-	x = i.x
-	y = i.y - i.sprite_height/2
+
+if (phase == 1) {
+	if (instance_exists(oPhase1Approacher)) {
+		ap = instance_nearest(x,y,oPhase1Approacher) 
+		move_towards_point(ap.x, ap.y, 1)
+	}
+
+
+	if (place_meeting(x,y,oPhase1Approacher)) {
+		ap = instance_nearest(x,y,oPhase1Approacher)
+		instance_create_depth(x,y+32,depth+1,oBoss1)
+		instance_destroy(ap)
+	}
+	
+
+	if (instance_exists(oBoss1)) {
+		i = instance_nearest(x,y, oBoss1)
+		image_index = 0
+		x = i.x
+		y = i.y - i.sprite_height/2
+	}
 }
 
-if (instance_exists(oBoss2Eye)) {
-	i = instance_nearest(x,y, oBoss2Eye)
-	image_index = 0
-	x = i.x + i.sprite_width/2
-	y = i.y + i.sprite_height/2
-}
+if (phase == 2) {
+	if (instance_exists(oPhase2Approacher)) {
+		ap = instance_nearest(x,y,oPhase2Approacher) 
+		move_towards_point(ap.x, ap.y, 1)
+	}
 
 
-if (!instance_exists(oBoss1) && instance_exists(oPhase2Approacher)) {
-	ap = instance_nearest(x,y,oPhase2Approacher) 
-	move_towards_point(ap.x, ap.y, 1)
-}
+	if (place_meeting(x,y,oPhase2Approacher)) {
+		ap = instance_nearest(x,y,oPhase2Approacher)
+		instance_create_depth(x,y,depth+1,oBoss2)
+		instance_destroy(ap)
+	}
+	
 
-if (place_meeting(x,y,oPhase2Approacher)) {
-	instance_create_depth(x,y,depth-1,oBoss2)	
-	instance_destroy(oPhase2Approacher)
-	speed = 0
+	if (instance_exists(oBoss2)) {
+		i = instance_nearest(x,y, oBoss2Eye)
+		image_index = 0
+		x = i.x + i.sprite_width/2 - 2
+		y = i.y + i.sprite_height/2
+	}
 }

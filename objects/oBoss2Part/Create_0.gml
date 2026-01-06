@@ -27,6 +27,9 @@ move_direction = 0;    // направление в градусах
 // --- ВИЗУАЛ ---
 draw_color = c_red;    // цвет блока (можно менять)
 
+
+hurt_timer = 30;
+
 // --- ФУНКЦИЯ: НАЧАТЬ ДВИЖЕНИЕ ---
 function start_move(_tx, _ty) {
     move_to_x = _tx;

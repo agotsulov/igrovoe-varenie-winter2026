@@ -35,6 +35,7 @@
     {"id":{"name":"oDoor","path":"objects/oDoor/oDoor.yy",},},
     {"id":{"name":"oDoublePoof","path":"objects/oDoublePoof/oDoublePoof.yy",},},
     {"id":{"name":"oEnemy","path":"objects/oEnemy/oEnemy.yy",},},
+    {"id":{"name":"oPhase1Approacher","path":"objects/oPhase1Approacher/oPhase1Approacher.yy",},},
     {"id":{"name":"oPhase2Approacher","path":"objects/oPhase2Approacher/oPhase2Approacher.yy",},},
     {"id":{"name":"oPickable","path":"objects/oPickable/oPickable.yy",},},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},},

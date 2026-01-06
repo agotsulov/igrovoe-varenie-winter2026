@@ -32,9 +32,20 @@ delta_y = y - prev_y;
 var bullet = instance_place(x, y, oBullet);
 if (bullet != noone) {
 	hp -= bullet.damage;
+	audio_play_sound(sfxBossHurt,1,0,2)
 	instance_destroy(bullet)
+	hurt_timer = 30
 }
- 
+hurt_timer -= 1
+
+if (hp < 1) {
+	for (var i = 0; i < 20; i++) {
+	    var randX = random_range(bbox_left, bbox_right);
+	    var randY = random_range(bbox_top, bbox_bottom);
+	    instance_create_depth(randX, randY, depth+1, oDoublePoof);
+	}
+	instance_destroy(self)
+}
 
 switch (state) {
     case BOSS_STATE.IDLE:

@@ -1,7 +1,7 @@
 // CREATE oBoss3
 event_inherited()
 
-max_hp = 8;
+max_hp = 1;
 hp = max_hp;
 facing = 1;
 

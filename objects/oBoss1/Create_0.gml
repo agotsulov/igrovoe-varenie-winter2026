@@ -1,7 +1,7 @@
 // CREATE oBoss
 event_inherited()
 
-max_hp = 6;
+max_hp = 1;
 hp = max_hp;
 facing = 1;
 
@@ -48,6 +48,8 @@ jump_count = 0;
 jump_landed = false;
 
 fly_up_speed = -4;
+
+hurt_timer = 30;
 
 // Dash атака
 dash_accel = 0.2;         // Ускорение

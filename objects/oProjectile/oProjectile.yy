@@ -34,8 +34,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sProjectile",
-    "path":"sprites/sProjectile/sProjectile.yy",
+    "name":"sBossPupil",
+    "path":"sprites/sBossPupil/sBossPupil.yy",
   },
   "spriteMaskId":null,
   "visible":true,

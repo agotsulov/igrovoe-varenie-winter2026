@@ -18,7 +18,14 @@ var bullet = instance_place(x, y, oBullet);
 if (bullet != noone and father != noone) {
 	father.hp -= bullet.damage;
 	instance_destroy(bullet)
+	audio_play_sound(sfxBossHurt,1,0,2)
+	with (oBoss2Part) {
+		hurt_timer = 30
+	}
+	
 }
+
+hurt_timer -= 1
 /*
 if (is_eye) {
 	shoot_timer += 1;

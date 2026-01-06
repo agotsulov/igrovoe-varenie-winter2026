@@ -135,5 +135,10 @@ if (bullet != noone) {
     if (hp <= 0) {
         // Смерть босса
         instance_destroy();
+		for (var i = 0; i < 20; i++) {
+		    var randX = random_range(bbox_left, bbox_right);
+		    var randY = random_range(bbox_top, bbox_bottom);
+		    instance_create_layer(randX, randY, layer, oDoublePoof);
+		}
     }
 }
