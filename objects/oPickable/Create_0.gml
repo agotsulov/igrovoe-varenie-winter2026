@@ -1,6 +1,8 @@
 // Скорости
-hsp = choose(random_range(-4, -1), random_range(1, 4));      // начальная горизонтальная скорость
+hsp = choose(random_range(-3, -1), random_range(1, 3));      // начальная горизонтальная скорость
 vsp = random_range(-8, -4);     // вертикальная скорость
+
+audio_play_sound(sfxBounce, 1, 0)
 
 // Физика
 grav = 0.4;        // гравитация
