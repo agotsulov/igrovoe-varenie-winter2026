@@ -110,6 +110,7 @@ pickup = function () {
     
     if (item != noone) {
         inventory = item.object_index;
+		audio_play_sound(sfxGrabSuccess, 1, 0)
         instance_destroy(item);
     }
 }

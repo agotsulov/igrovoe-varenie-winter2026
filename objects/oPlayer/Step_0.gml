@@ -243,6 +243,7 @@ if (!invulnerable) {
         if (!is_riding_this_enemy) {
 			
             hp -= enemy.damage;
+			audio_play_sound(sfxPlayerHurt, 1, 0)
             invulnerable = true;
             invulnerable_timer = invulnerable_duration;
             

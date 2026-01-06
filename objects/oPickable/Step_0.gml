@@ -30,7 +30,9 @@ if (place_meeting(x, y + vsp, oSolid)) {
     // Остановка если скорость мала
     if (abs(vsp) < min_speed) {
         vsp = 0;
-    }
+    } else {
+		audio_play_sound(sfxBounce, 1, 0)
+	}
 }
 
 // Горизонтальное движение + отскок от стен
