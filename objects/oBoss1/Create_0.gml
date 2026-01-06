@@ -141,4 +141,5 @@ boss_do_jump = function() {
     hsp = jump_hspeed * facing;
     vsp = jump_vspeed;
     jump_landed = false;
+	audio_play_sound(sfxBossJump,1,0)
 }

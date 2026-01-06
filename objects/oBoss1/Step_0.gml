@@ -55,6 +55,8 @@ switch (state) {
 
         if (grounded && vsp >= 0) {
             if (!jump_landed) {
+				screenshake(5)
+				audio_play_sound(sfxBigSlam,1,0)
                 jump_landed = true;
                 hsp = 0;
                 vsp = 0;
@@ -84,6 +86,9 @@ switch (state) {
 		// Врезались в стену
 		if (collide_x) {
 			boss_change_state(BOSS_STATE.STUNNED);
+			screenshake(5)
+			audio_play_sound(sfxSmallFall,1,0)
+			
 		}
         break;
 		
@@ -98,6 +103,8 @@ switch (state) {
 		state_timer--;
         if (state_timer <= 0) {
 			boss_change_state(BOSS_STATE.DASH_ATTACK);
+			audio_play_sound(sfxBossDash,1,0)
+			audio_play_sound(sfxHardwareLoop,1,4)
         }
 		break;
 		
@@ -105,6 +112,8 @@ switch (state) {
 		if (place_meeting(x, y - 1, oSolid)) {
 		    vsp = 0;
 		    boss_change_state(BOSS_STATE.CHASE);
+			screenshake(5)
+			audio_play_sound(sfxSmallFall,1,0)
 		}
 		break;
 
@@ -125,6 +134,8 @@ switch (state) {
 	    if (state_timer <= 0) {
 	        hsp = 0;
 	        boss_change_state(BOSS_STATE.FALLING);
+			audio_play_sound(sfxBossMechanism,1,0)
+			audio_stop_sound(sfxHardwareLoop)
 	    }
 	    break;
 
@@ -135,6 +146,8 @@ switch (state) {
 	        vsp = 0;
 	        hsp = 0;
 	        boss_change_state(BOSS_STATE.STUNNED_FALLING);  
+			screenshake(5)
+			audio_play_sound(sfxBigSlam,1,0)
 	    }
 	    break;
 		

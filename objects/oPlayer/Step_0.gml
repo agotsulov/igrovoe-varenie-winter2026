@@ -144,6 +144,7 @@ if (on_ground) {
 // Jump buffer — запоминаем нажатие прыжка
 if (btn_jump_pressed) {
     jump_buffer = jump_buffer_max;
+	
 }
 if (jump_buffer > 0) jump_buffer--;
 
@@ -298,3 +299,16 @@ if (!override_playing) {
         image_speed = 1;
     }
 }
+
+
+// Move viewport smoothly toward goal
+var cam = view_get_camera(0);
+var current_x = camera_get_view_x(cam);
+var current_y = camera_get_view_y(cam);
+
+// Calculate new position (2 pixels per frame toward goal)
+var new_x = current_x + sign(goal_x - current_x) * min(abs(goal_x - current_x), 8);
+var new_y = current_y + sign(goal_y - current_y) * min(abs(goal_y - current_y), 8);
+
+// Apply to camera
+camera_set_view_pos(cam, new_x, new_y);

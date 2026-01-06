@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"musBoss",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":309.969,
+  "exportDir":"",
+  "name":"musBoss",
+  "parent":{
+    "name":"Mus",
+    "path":"folders/Mus.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"musBoss.mp3",
+  "volume":1.0,
+}

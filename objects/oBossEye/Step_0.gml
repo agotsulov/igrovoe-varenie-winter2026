@@ -29,3 +29,16 @@ if (instance_exists(oBoss1)) {
 	x = i.x
 	y = i.y - i.sprite_height/2
 }
+/*
+if (instance_exists(oBoss2)) {
+	i = instance_nearest(x,y, oBoss2)
+	image_index = 0
+	x = i.x
+	y = i.y - i.sprite_height/2
+}
+*/
+
+if (!instance_exists(oBoss1) && instance_exists(oPhase2Approacher)) {
+	ap = instance_nearest(x,y,oPhase2Approacher) 
+	move_towards_point(ap.x, ap.y, 1)	
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scrGlobalFuncDefs",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scrGlobalFuncDefs",
+  "parent":{
+    "name":"IgorVarWinter2026",
+    "path":"IgorVarWinter2026.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

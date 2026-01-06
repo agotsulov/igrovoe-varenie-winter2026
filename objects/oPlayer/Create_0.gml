@@ -77,6 +77,12 @@ inventory = false;
 
 was_riding_boss = noone;
 
+// КАМЕРА
+
+// Camera Controller Initialization
+goal_x = 0;
+goal_y = 0;
+
 shoot = function () {
 	show_debug_message("SHOOT")
     var offset = facing_x ? -8 : 8 // TODO: 8 заменить на растояние откуда вылетает пуля
@@ -122,6 +128,7 @@ function trigger_grab_animation() {
     image_speed = 0.7;
     override_playing = true;
     current_override = sGatoGrab;
+	screenshake(10)
 }
 
 function trigger_throw_animation() {
