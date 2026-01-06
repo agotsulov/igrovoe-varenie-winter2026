@@ -1,7 +1,7 @@
 // CREATE
 
-hp = 4123123;
-max_hp = 1231231234;
+hp = 5;
+max_hp = 5;
 
 // Движение
 xsp = 0.0;
@@ -9,6 +9,8 @@ ysp = 0.0;
 move_x = 0;
 
 // Визуал
+
+aura_rotation = 0;
 
 // Normal animation tracking
 current_normal_animation = noone;
@@ -84,12 +86,13 @@ goal_x = 0;
 goal_y = 0;
 
 shoot = function () {
-	show_debug_message("SHOOT")
     var offset = facing_x ? -8 : 8 // TODO: 8 заменить на растояние откуда вылетает пуля
     var bullet = instance_create_depth(x + offset, y-sprite_height/2, depth + 1, oBullet);
   
     bullet.hsp = facing_x;
     //bullet.vsp = facing_y;
+	
+	audio_play_sound(sfxToss,1,0)
 
     inventory = false
 }
@@ -110,8 +113,8 @@ pickup = function () {
     
     if (item != noone) {
         inventory = item.object_index;
-		audio_play_sound(sfxGrabSuccess, 1, 0)
-        instance_destroy(item);
+		audio_play_sound(sfxGrabSuccess, 1, 0, 1.5)
+        instance_destroy(item,false);
     }
 }
 
@@ -124,6 +127,7 @@ function trigger_hurt_animation() {
 }
 
 function trigger_grab_animation() {
+	audio_play_sound(sfxSwing,1,0,1.5)
     sprite_index = sGatoGrab;
     image_index = 0;
     image_speed = 0.7;

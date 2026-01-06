@@ -5,3 +5,5 @@ sp = 4;
 
 damage = 1;
 lifetime = 60 * 20;
+
+aura_rotation = 0

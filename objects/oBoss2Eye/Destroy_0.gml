@@ -1,1 +1,1 @@
-instance_create_depth(x+8,y+8,depth+1)
+instance_create_depth(x+8,y+8,depth+1, oDoublePoof)

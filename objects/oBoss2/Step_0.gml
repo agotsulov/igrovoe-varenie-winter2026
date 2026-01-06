@@ -1,5 +1,4 @@
 
-
 switch (state) {    
     // --- ОЖИДАНИЕ ПЕРЕД АТАКОЙ ---
     case BOSS_STATE2.IDLE:
@@ -92,3 +91,14 @@ switch (state) {
         break;
 }
 
+
+if (hp < 1) {
+	instance_destroy(self)
+	with (oBoss2Part) {
+		instance_destroy()
+	}
+	
+	with (oBoss2Eye) {
+		instance_destroy()	
+	}
+}

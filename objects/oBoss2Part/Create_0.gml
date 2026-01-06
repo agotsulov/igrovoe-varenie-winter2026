@@ -36,6 +36,7 @@ function start_move(_tx, _ty) {
     move_to_y = _ty;
     move_direction = point_direction(x, y, _tx, _ty);
     is_moving = true;
+	audio_play_sound(sfxBossMechanism,1,0)
 }
 
 // --- ФУНКЦИЯ: ОСТАНОВИТЬСЯ ---
@@ -43,5 +44,6 @@ function stop_move() {
     is_moving = false;
     x = move_to_x;
     y = move_to_y;
+	audio_play_sound(sfxMechanicFall,1,0)
 }
 

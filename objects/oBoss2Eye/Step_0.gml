@@ -12,6 +12,7 @@ if (shoot_timer >= shoot_interval) {
 	    var proj = instance_create_layer(x, y, layer, oRock);
 	    proj.hsp = lengthdir_x(1, dir);
 	    proj.vsp = lengthdir_y(1, dir);
-		proj.sp = 1.5
+		proj.sp = 2
+		audio_play_sound(sfxEnemyFire,1,0)
 	}
 }

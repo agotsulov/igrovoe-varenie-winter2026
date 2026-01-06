@@ -1,3 +1,9 @@
+if (sleep_timer > 0) {
+	speed = 0
+	sleep_timer -= 1
+	exit
+}
+
 // Get direction to player from eye's origin
 var target_x = oPlayer.x - x;
 var target_y = oPlayer.y - y;
@@ -65,5 +71,32 @@ if (phase == 2) {
 		image_index = 0
 		x = i.x + i.sprite_width/2 - 2
 		y = i.y + i.sprite_height/2
+	}
+}
+
+if (phase == 99) {
+	ap = instance_nearest(x,y,oFinalApproacher) 
+	move_towards_point(ap.x, ap.y, 1)
+		
+	if (audio_is_playing(musBoss)) {
+		audio_stop_sound(musBoss)	
+	}
+	special_timer -= 1
+	if (special_timer < 0) {
+		special_timer = 15
+		instance_create_depth(x,y,depth+1,oDoublePoof)
+		audio_play_sound(sfxSmallFall,1,0)
+	}
+	
+	if (place_meeting(x,y,oFinalApproacher)) {
+		for (var i = 0; i < 20; i++) {
+		    var randX = random_range(bbox_left, bbox_right);
+		    var randY = random_range(bbox_top, bbox_bottom);
+		    instance_create_depth(randX, randY, depth+1, oDoublePoof);
+		}
+		instance_destroy(self)
+		audio_play_sound(sfxBigSlam,1,0)
+		
+		instance_create_depth(ap.x,ap.y,depth+1,oRestartWaiter)
 	}
 }

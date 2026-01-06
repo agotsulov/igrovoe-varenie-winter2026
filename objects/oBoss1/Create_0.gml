@@ -129,7 +129,7 @@ boss_change_state = function(_new_state) {
 boss_do_proj = function() {
 	var proj = instance_create_depth(irandom_range(24, 294), 24, depth + 1, oRock);
   
-	proj.vsp = 1;	
+	proj.vsp = 0.8;	
 	
 }
 

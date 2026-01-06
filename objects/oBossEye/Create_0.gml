@@ -11,3 +11,7 @@ pupil_y = 0;
 
 
 phase = 1
+
+
+special_timer = 0
+sleep_timer = 0

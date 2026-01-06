@@ -1,7 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-max_hp = 2
+max_hp = 6
 hp = max_hp
 
 // --- НАСТРОЙКИ СЕТКИ ---
@@ -119,5 +119,5 @@ function create_blocks() {
 create_blocks();
 
 // Начальная пауза
-timer = 60;
+timer = 120;
 

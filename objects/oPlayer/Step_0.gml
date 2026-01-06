@@ -155,6 +155,7 @@ if (jump_buffer > 0 && can_jump) {
     is_jumping = true;
     coyote_timer = 0;
     jump_buffer = 0;
+	audio_play_sound(sfxJump,1,0)
 }
 
 // Variable jump height — отпустил кнопку раньше = прыжок ниже
@@ -273,7 +274,8 @@ if (inventory) {
 
 // === СМЕРТЬ ===
 if (hp < 1) {
-    game_restart();
+	instance_create_depth(160,90,depth+1,oRestartWaiterLose)
+    self.y = 9999999
 }
 
 

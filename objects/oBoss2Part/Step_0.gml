@@ -22,7 +22,6 @@ if (bullet != noone and father != noone) {
 	with (oBoss2Part) {
 		hurt_timer = 30
 	}
-	
 }
 
 hurt_timer -= 1
