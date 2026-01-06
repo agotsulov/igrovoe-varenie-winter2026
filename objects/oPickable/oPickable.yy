@@ -34,6 +34,9 @@
     "name":"sPickable",
     "path":"sprites/sPickable/sPickable.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"maskPickable",
+    "path":"sprites/maskPickable/maskPickable.yy",
+  },
   "visible":true,
 }

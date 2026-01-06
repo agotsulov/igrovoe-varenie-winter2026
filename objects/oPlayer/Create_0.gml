@@ -6,18 +6,47 @@ max_hp = 4;
 // Движение
 xsp = 0.0;
 ysp = 0.0;
+move_x = 0;
+
+// Визуал
+
+// Normal animation tracking
+current_normal_animation = noone;
+normal_frame = 0;
+normal_frame_speed = 0;
+
+facing_left = false;
+walkAnimation = sGatoWalk;
+jumpAnimation = sGatoJump;
+idleAnimation = sGatoIdle;
+grabAnimation = sGatoGrab;
+throwAnimation = sGatoShoot;
+hurtAnimation = sGatoHurt;
+
+// Animation control
+current_override = noone;        // Which animation is currently overriding
+override_frame = 0;
+override_speed = 1;
+override_playing = false;        // Track if override is playing
+
+walk_speed_multiplier = 0.1;     // Adjust to match walk animation to xsp
+
+// Jump animation control
+jump_frame_2_min_ysp = -0.5;     // Minimum ysp for hang time frame
+jump_frame_2_max_ysp = 0.5;      // Maximum ysp for hang time frame
+
 
 // Горизонтальное движение
-ground_accel = 0.8;      // Ускорение на земле
-air_accel = 0.5;         // Ускорение в воздухе (меньше контроля)
+ground_accel = 0.4;      // Ускорение на земле
+air_accel = 0.2;         // Ускорение в воздухе (меньше контроля)
 ground_friction = 0.85;  // Трение на земле (0-1, чем меньше — тем быстрее остановка)
 air_friction = 0.95;     // Трение в воздухе (больше — скользишь дольше)
-max_speed = 4.5;
+max_speed = 3.5;
 
 // Вертикальное движение
 gravity_accel = 0.45;    // Гравитация
 max_fall_speed = 10;     // Максимальная скорость падения
-jump_speed = 8.5;        // Сила прыжка
+jump_speed = 5.5;        // Сила прыжка
 jump_hold_gravity = 0.25; // Гравитация при удержании прыжка (для variable jump)
 
 // Буферы и таймеры
@@ -51,7 +80,7 @@ was_riding_boss = noone;
 shoot = function () {
 	show_debug_message("SHOOT")
     var offset = facing_x ? -8 : 8 // TODO: 8 заменить на растояние откуда вылетает пуля
-    var bullet = instance_create_depth(x + offset, y - sprite_height, depth + 1, oBullet);
+    var bullet = instance_create_depth(x + offset, y-sprite_height/2, depth + 1, oBullet);
   
     bullet.hsp = facing_x;
     //bullet.vsp = facing_y;
@@ -61,11 +90,11 @@ shoot = function () {
 
 
 pickup = function () {
-    var check_x = x + facing_x * sprite_width;
-    var check_y = y;
-    
-    var half_w = sprite_width / 2;
+    var half_w = 12;
     var half_h = sprite_height / 2;
+	
+    var check_x = x + facing_x + half_w;
+    var check_y = y;
     
     var item = collision_rectangle(
         check_x - half_w, check_y - half_h,
@@ -79,3 +108,26 @@ pickup = function () {
     }
 }
 
+function trigger_hurt_animation() {
+    sprite_index = sGatoHurt;
+    image_index = 0;
+    image_speed = 0.2;
+    override_playing = true;
+    current_override = sGatoHurt;
+}
+
+function trigger_grab_animation() {
+    sprite_index = sGatoGrab;
+    image_index = 0;
+    image_speed = 0.7;
+    override_playing = true;
+    current_override = sGatoGrab;
+}
+
+function trigger_throw_animation() {
+    sprite_index = sGatoShoot;
+    image_index = 0;
+    image_speed = 1;
+    override_playing = true;
+    current_override = sGatoShoot;
+}

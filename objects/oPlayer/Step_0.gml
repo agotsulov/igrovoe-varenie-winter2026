@@ -116,6 +116,11 @@ var current_friction = on_ground ? ground_friction : air_friction;
 if (move_x != 0) {
     // Ускорение
     xsp += move_x * current_accel;
+	if (move_x < 0) {
+		facing_left = true	
+	} else {
+		facing_left = false
+	}
 } else {
     // Трение (замедление)
     xsp *= current_friction;
@@ -235,6 +240,7 @@ if (!invulnerable) {
         var is_riding_this_enemy = (enemy == riding_boss);
         
         if (!is_riding_this_enemy) {
+			
             hp -= enemy.damage;
             invulnerable = true;
             invulnerable_timer = invulnerable_duration;
@@ -244,6 +250,7 @@ if (!invulnerable) {
             if (knockback_dir == 0) knockback_dir = 1;
             xsp = knockback_dir * 3;
             ysp = -3;
+			trigger_hurt_animation()
         }
     }
 }
@@ -251,11 +258,13 @@ if (!invulnerable) {
 // === АТАКА ===
 if (inventory) { 
     if (btn_attack_pressed) {
-        shoot();
+        //shoot();
+		trigger_throw_animation()
     }
 } else {
-    if (btn_attack) {
-        pickup();
+    if (btn_attack_pressed) {
+        //pickup();
+		trigger_grab_animation()
     }
 }
 
@@ -263,4 +272,29 @@ if (inventory) {
 // === СМЕРТЬ ===
 if (hp < 1) {
     game_restart();
+}
+
+
+// Check if override animation just finished
+if (override_playing) {
+    if (image_index >= sprite_get_number(sprite_index) - 1) {
+        // Override animation completed
+        override_playing = false;
+        current_override = noone;
+    }
+}
+
+// Only update normal animations if no override is playing
+if (!override_playing) {
+    // Update sprite based on state
+    if (!on_ground) {
+        sprite_index = sGatoJump;
+        image_speed = 0; // We'll set frame manually
+    } else if (xsp != 0) {
+        sprite_index = sGatoWalk;
+        image_speed = abs(xsp) * 0.5; // Adjust multiplier as needed
+    } else {
+        sprite_index = sGatoIdle;
+        image_speed = 1;
+    }
 }
