@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Script1",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Script1",
+  "parent":{
+    "name":"IgorVarWinter2026",
+    "path":"IgorVarWinter2026.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

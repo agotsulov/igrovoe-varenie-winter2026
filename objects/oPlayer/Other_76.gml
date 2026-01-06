@@ -2,8 +2,8 @@ show_debug_message("ASIDJHAS:DASHDLJASD")
 switch (event_data[? "message"])
 {
     case "player_grab":
-        pickup()
-		
+		if (!inventory)
+			pickup()
     break;
 	case "player_toss":
 		shoot()
