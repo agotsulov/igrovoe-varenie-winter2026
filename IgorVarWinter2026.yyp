@@ -11,7 +11,6 @@
   "defaultScriptType":1,
   "Folders":[
     {"$GMFolder":"","%Name":"Objects","folderPath":"folders/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"YellowBoss","folderPath":"folders/Objects/YellowBoss.yy","name":"YellowBoss","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Sprites","folderPath":"folders/Sprites.yy","name":"Sprites","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
@@ -25,6 +24,9 @@
   "name":"IgorVarWinter2026",
   "resources":[
     {"id":{"name":"oBoss1","path":"objects/oBoss1/oBoss1.yy",},},
+    {"id":{"name":"oBoss2","path":"objects/oBoss2/oBoss2.yy",},},
+    {"id":{"name":"oBoss2Part","path":"objects/oBoss2Part/oBoss2Part.yy",},},
+    {"id":{"name":"oBoss3","path":"objects/oBoss3/oBoss3.yy",},},
     {"id":{"name":"oBullet","path":"objects/oBullet/oBullet.yy",},},
     {"id":{"name":"oEnemy","path":"objects/oEnemy/oEnemy.yy",},},
     {"id":{"name":"oPickable","path":"objects/oPickable/oPickable.yy",},},
@@ -32,9 +34,11 @@
     {"id":{"name":"oProjectile","path":"objects/oProjectile/oProjectile.yy",},},
     {"id":{"name":"oRock","path":"objects/oRock/oRock.yy",},},
     {"id":{"name":"oSolid","path":"objects/oSolid/oSolid.yy",},},
-    {"id":{"name":"oYBossPart","path":"objects/oYBossPart/oYBossPart.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"Room2","path":"rooms/Room2/Room2.yy",},},
+    {"id":{"name":"Room3","path":"rooms/Room3/Room3.yy",},},
     {"id":{"name":"sBoss","path":"sprites/sBoss/sBoss.yy",},},
+    {"id":{"name":"sBoss3","path":"sprites/sBoss3/sBoss3.yy",},},
     {"id":{"name":"sBullet","path":"sprites/sBullet/sBullet.yy",},},
     {"id":{"name":"sPickable","path":"sprites/sPickable/sPickable.yy",},},
     {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},},
@@ -45,6 +49,8 @@
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"roomId":{"name":"Room2","path":"rooms/Room2/Room2.yy",},},
+    {"roomId":{"name":"Room3","path":"rooms/Room3/Room3.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
