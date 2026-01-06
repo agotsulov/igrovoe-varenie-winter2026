@@ -19,7 +19,7 @@ if (bullet != noone and father != noone) {
 	father.hp -= bullet.damage;
 	instance_destroy(bullet)
 }
-
+/*
 if (is_eye) {
 	shoot_timer += 1;
 
@@ -34,4 +34,4 @@ if (is_eye) {
 	        proj.vsp = lengthdir_y(1, dir);
 	    }
 	}
-}
+}*/
