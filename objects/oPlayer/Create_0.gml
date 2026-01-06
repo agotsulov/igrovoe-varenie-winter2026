@@ -90,10 +90,10 @@ shoot = function () {
 
 
 pickup = function () {
-    var half_w = 12;
+    var half_w = 10;
     var half_h = sprite_height / 2;
 	
-    var check_x = x + facing_x + half_w;
+    var check_x = x + facing_x * half_w;
     var check_y = y;
     
     var item = collision_rectangle(
