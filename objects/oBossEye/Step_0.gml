@@ -29,16 +29,22 @@ if (instance_exists(oBoss1)) {
 	x = i.x
 	y = i.y - i.sprite_height/2
 }
-/*
-if (instance_exists(oBoss2)) {
-	i = instance_nearest(x,y, oBoss2)
+
+if (instance_exists(oBoss2Eye)) {
+	i = instance_nearest(x,y, oBoss2Eye)
 	image_index = 0
-	x = i.x
-	y = i.y - i.sprite_height/2
+	x = i.x + i.sprite_width/2
+	y = i.y + i.sprite_height/2
 }
-*/
+
 
 if (!instance_exists(oBoss1) && instance_exists(oPhase2Approacher)) {
 	ap = instance_nearest(x,y,oPhase2Approacher) 
-	move_towards_point(ap.x, ap.y, 1)	
+	move_towards_point(ap.x, ap.y, 1)
+}
+
+if (place_meeting(x,y,oPhase2Approacher)) {
+	instance_create_depth(x,y,depth-1,oBoss2)	
+	instance_destroy(oPhase2Approacher)
+	speed = 0
 }

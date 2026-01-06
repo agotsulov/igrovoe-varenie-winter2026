@@ -4,8 +4,8 @@ event_inherited();
 father = noone
 
 is_eye = false
-shoot_timer = 0;
-shoot_interval = 60 * 3; // 3 секунды (при 60 FPS)
+//shoot_timer = 0;
+//shoot_interval = 60 * 3; // 3 секунды (при 60 FPS)
 
 // --- ПОЗИЦИИ (устанавливаются контроллером) ---
 home_x = x;

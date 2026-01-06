@@ -1,7 +1,7 @@
 // CREATE
 
-hp = 4;
-max_hp = 4;
+hp = 4123123;
+max_hp = 1231231234;
 
 // Движение
 xsp = 0.0;
@@ -96,10 +96,10 @@ shoot = function () {
 
 
 pickup = function () {
-    var half_w = 12;
+    var half_w = 10;
     var half_h = sprite_height / 2;
 	
-    var check_x = x + facing_x + half_w;
+    var check_x = x + facing_x * half_w;
     var check_y = y;
     
     var item = collision_rectangle(
@@ -128,7 +128,6 @@ function trigger_grab_animation() {
     image_speed = 0.7;
     override_playing = true;
     current_override = sGatoGrab;
-	screenshake(10)
 }
 
 function trigger_throw_animation() {
