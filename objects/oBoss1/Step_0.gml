@@ -28,6 +28,14 @@ if (place_meeting(x, y + vsp, oSolid)) {
 delta_x = x - prev_x;
 delta_y = y - prev_y;
 
+// Boss damage
+var bullet = instance_place(x, y, oBullet);
+if (bullet != noone) {
+	hp -= bullet.damage;
+	instance_destroy(bullet)
+}
+ 
+
 switch (state) {
     case BOSS_STATE.IDLE:
 		if (!grounded) {
@@ -36,7 +44,7 @@ switch (state) {
 		
         state_timer--;
         if (state_timer <= 0) {
-            boss_next_attack();
+            boss_change_state(BOSS_STATE.JUMP_ATTACK)
         }
         break;
     

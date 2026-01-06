@@ -49,8 +49,9 @@ inventory = false;
 was_riding_boss = noone;
 
 shoot = function () {
+	show_debug_message("SHOOT")
     var offset = facing_x ? -8 : 8 // TODO: 8 заменить на растояние откуда вылетает пуля
-    var bullet = instance_create_depth(x + offset, y - sprite_height / 2 + 1, depth + 1, oBullet);
+    var bullet = instance_create_depth(x + offset, y - sprite_height, depth + 1, oBullet);
   
     bullet.hsp = facing_x;
     //bullet.vsp = facing_y;

@@ -17,17 +17,20 @@ delta_x = 0;
 delta_y = 0;
 
 // FSM состояния
+// Порядок как тут указан.
+// После STUNNED_FALLING возвращяется в JUMP_ATTACK
+// Задержку между атаками надо как раз в STUNNED настраивать тут в коде create ниже 
 enum BOSS_STATE {
     IDLE,
     JUMP_ATTACK,
-    DASH_ATTACK,
-    STUNNED,
 	STUNNED_JUMP,
+    DASH_ATTACK,
+	STUNNED,
     FLY_UP,     
     CHASE,       
     FALLING,   
 	STUNNED_FALLING,
-}
+} 
 
 idle_delay = 60;
 
@@ -39,9 +42,6 @@ jump_hspeed = 2;
 jump_vspeed = -3.5;
 jump_gravity = 0.1;
 jump_delay = 10;
-
-//dash_speed = 6;
-//dash_stun_time = 20
 
 // Переменные атак
 jump_count = 0;
@@ -59,9 +59,6 @@ chase_accel = 0.2;         // Ускорение
 chase_max_speed = 4;       // Максимальная скорость
 chase_duration = 90;
 chase_friction = 0.85;     // Трение при смене направления
-
-current_attack_index = 0;
-attacks = [BOSS_STATE.JUMP_ATTACK, BOSS_STATE.DASH_ATTACK];
 
 
 boss_change_state = function(_new_state) {
@@ -144,14 +141,4 @@ boss_do_jump = function() {
     hsp = jump_hspeed * facing;
     vsp = jump_vspeed;
     jump_landed = false;
-}
-
-
-boss_next_attack = function() {
-	if (current_attack_index >= array_length(attacks)) {
-		current_attack_index = 0
-	}
-    var _attack = attacks[current_attack_index];
-	current_attack_index += 1
-	boss_change_state(_attack);
 }
