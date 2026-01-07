@@ -315,3 +315,14 @@ var new_y = current_y + sign(goal_y - current_y) * min(abs(goal_y - current_y), 
 
 // Apply to camera
 camera_set_view_pos(cam, new_x, new_y);
+
+
+if (xsp > 1 || xsp < -1 ) {
+	inactive_timer = 60*15
+}
+
+inactive_timer -= 1
+
+if (inactive_timer < 0) {
+	game_restart()
+}

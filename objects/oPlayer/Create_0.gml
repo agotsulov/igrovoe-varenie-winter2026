@@ -75,7 +75,7 @@ invulnerable = false;
 invulnerable_timer = 0;
 invulnerable_duration = 60;
 
-inventory = true;
+inventory = false;
 
 was_riding_boss = noone;
 
@@ -84,6 +84,8 @@ was_riding_boss = noone;
 // Camera Controller Initialization
 goal_x = 0;
 goal_y = 0;
+
+inactive_timer = 60*15
 
 shoot = function () {
     var offset = facing_x ? -8 : 8 // TODO: 8 заменить на растояние откуда вылетает пуля
