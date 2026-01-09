@@ -67,8 +67,8 @@ switch (state) {
             boss_change_state();
         } else {
             var new_x = lerp(parabola_start_x, parabola_end_x, t);
-			var parabola_offset = power(sin(t * pi), 2) * parabola_height;
-            //var parabola_offset = 4 * parabola_height * t * (1 - t);
+			var parabola_offset = 4 * parabola_height * t * (1 - t);
+            //var parabola_offset = power(sin(t * pi), 2) * parabola_height;
             var base_y = lerp(parabola_start_y, parabola_end_y, t);
             var new_y = base_y + parabola_offset;
             
@@ -89,9 +89,9 @@ switch (state) {
             boss_change_state();
         } else {
             var new_x = lerp(parabola_start_x, parabola_end_x, t);
-			var parabola_offset = power(sin(t * pi), 2) * parabola_height;
-            //var parabola_offset = 4 * parabola_height * t * (1 - t);
-			//var parabola_offset = sin(t * pi) * parabola_height;
+			var parabola_offset = 4 * parabola_height * t * (1 - t);
+			//var parabola_offset = power(sin(t * pi), 2) * parabola_height;
+            //var parabola_offset = sin(t * pi) * parabola_height;
             var base_y = lerp(parabola_start_y, parabola_end_y, t);
             var new_y = base_y + parabola_offset;
             

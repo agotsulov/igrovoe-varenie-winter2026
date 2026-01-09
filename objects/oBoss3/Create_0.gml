@@ -1,7 +1,7 @@
 // CREATE oBoss3
 event_inherited()
 
-max_hp = 4;
+max_hp = 8;
 hp = max_hp;
 facing = 1;
 
@@ -80,8 +80,33 @@ stunned_heavy_duration = 60 * 2;
 
 // === ФУНКЦИИ ===
 
-/// @function boss_change_state()
-/// @description Переход к следующей ноде по паттерну
+shoot = function(start_x, start_y, proj_speed = 2) {
+	if (instance_exists(oPlayer)) {
+		var dir = point_direction(start_x, start_y, oPlayer.x, oPlayer.y);
+        dir += irandom_range(-4, 4); // чтобы он не точно в игрока бил всегда
+		var proj = instance_create_layer(start_x, start_y, "Instances_1", oRock);
+		proj.hsp = lengthdir_x(1, dir);
+		proj.vsp = lengthdir_y(1, dir);
+		proj.sp = proj_speed
+	}
+}
+
+shoot_left = function() {
+	shoot(x-32, y)
+}
+shoot_right = function() {
+	shoot(x+32, y)
+}
+shoot_up = function() {
+	shoot(x, y+32)
+}
+shoot_down = function() {
+	shoot(x, y-32)
+}
+
+shoot_functions = [shoot_left, shoot_right, shoot_up, shoot_down];
+
+/// Переход к следующей ноде по паттерну
 boss_change_state = function() {
     pattern_index = boss_pattern[pattern_index].next;
     var _new_state = boss_pattern[pattern_index].state;
@@ -145,17 +170,16 @@ boss_change_state = function() {
             break;
 			
 		case BOSS3_STATE.ATTACK:
-			state_timer = 60;
+			state_timer = 30;
             hsp = 0;
             vsp = 0;
-			var shoot_functions = [shoot_left, shoot_right, shoot_up, shoot_down];
-			shoot_functions = array_shuffle(shoot_functions);
+			zshoot_functions = array_shuffle(shoot_functions);
 			shoot_functions[0]();
 			shoot_functions[1]();
             break;
 			
 		case BOSS3_STATE.ATTACK_OR_SPAWN:
-			state_timer = 60;
+			state_timer = 30;
             hsp = 0;
             vsp = 0;
 
@@ -164,38 +188,16 @@ boss_change_state = function() {
 		        spawn1.facing = -1;
 		        var spawn2 = instance_create_layer(x + spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
 		        spawn2.facing = 1;
+		        shoot_functions = array_shuffle(shoot_functions);
+		        shoot_functions[0]();
 		    } else {
-		        var shoot_functions1 = [shoot_left, shoot_right, shoot_up, shoot_down];
-		        shoot_functions1 = array_shuffle(shoot_functions1);
-		        shoot_functions1[0]();
-		        shoot_functions1[1]();
+		        shoot_functions = array_shuffle(shoot_functions);
+		        shoot_functions[0]();
+		        shoot_functions[1]();
 		    }
             break;
     }
 }
 
 
-shoot = function(start_x, start_y, proj_speed = 2, offset_x = 0, offset_y = 0) {
-	if (instance_exists(oPlayer)) {
-		var dir = point_direction(start_x, start_y, oPlayer.x + offset_x, oPlayer.y + offset_y);
-        
-		var proj = instance_create_layer(start_x, start_y, "Instances_1", oRock);
-		proj.hsp = lengthdir_x(1, dir);
-		proj.vsp = lengthdir_y(1, dir);
-		proj.sp = proj_speed
-	}
-}
-
-shoot_left = function() {
-	shoot(x-32, y)
-}
-shoot_right = function() {
-	shoot(x+32, y)
-}
-shoot_up = function() {
-	shoot(x, y+32)
-}
-shoot_down = function() {
-	shoot(x, y-32)
-}
 
