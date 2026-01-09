@@ -75,7 +75,7 @@ invulnerable = false;
 invulnerable_timer = 0;
 invulnerable_duration = 60;
 
-inventory = false;
+inventory = true;
 
 was_riding_boss = noone;
 
