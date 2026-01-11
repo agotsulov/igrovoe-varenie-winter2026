@@ -1,4 +1,4 @@
 with (oBossEye) {
-	phase = 99
+	phase = 3
 	sleep_timer = 60
 }

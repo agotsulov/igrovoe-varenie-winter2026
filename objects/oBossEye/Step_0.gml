@@ -45,7 +45,7 @@ if (phase == 1) {
 	
 
 	if (instance_exists(oBoss1)) {
-		i = instance_nearest(x,y, oBoss1)
+		var i = instance_nearest(x,y, oBoss1)
 		image_index = 0
 		x = i.x
 		y = i.y - i.sprite_height/2
@@ -67,10 +67,32 @@ if (phase == 2) {
 	
 
 	if (instance_exists(oBoss2)) {
-		i = instance_nearest(x,y, oBoss2Eye)
+		var i = instance_nearest(x,y, oBoss2Eye)
 		image_index = 0
 		x = i.x + i.sprite_width/2 - 2
 		y = i.y + i.sprite_height/2
+	}
+}
+
+if (phase == 3) {
+	if (instance_exists(oPhase3Approacher)) {
+		ap = instance_nearest(x,y,oPhase3Approacher) 
+		move_towards_point(ap.x, ap.y, 1)
+	}
+
+
+	if (place_meeting(x,y,oPhase3Approacher)) {
+		ap = instance_nearest(x,y,oPhase3Approacher)
+		instance_create_depth(x,y,depth+1,oBoss3)
+		instance_destroy(ap)
+	}
+	
+
+	if (instance_exists(oBoss3)) {
+		var i = instance_nearest(x,y, oBoss3)
+		image_index = 0
+		x = i.x
+		y = i.y
 	}
 }
 

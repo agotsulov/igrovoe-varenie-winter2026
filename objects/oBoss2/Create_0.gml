@@ -1,7 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-max_hp = 6
+max_hp = 1
 hp = max_hp
 
 // --- НАСТРОЙКИ СЕТКИ ---
