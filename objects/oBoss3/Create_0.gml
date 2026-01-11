@@ -16,6 +16,8 @@ prev_y = y;
 delta_x = 0;
 delta_y = 0;
 
+start_y = y;  
+
 // FSM
 enum BOSS3_STATE {
     IDLE,
@@ -28,6 +30,7 @@ enum BOSS3_STATE {
     STUNNED_HEAVY,
     ATTACK, 
 	ATTACK_OR_SPAWN,
+    FLY_TO_RANDOM,
 }
 
 state = BOSS3_STATE.IDLE;
@@ -45,10 +48,20 @@ boss_pattern = [
     {state: BOSS3_STATE.STUNNED_LIGHT, next: 5},
     {state: BOSS3_STATE.ATTACK_OR_SPAWN, next: 6},
     {state: BOSS3_STATE.STUNNED_LIGHT, next: 7},
-    {state: BOSS3_STATE.PARABOLA_RL, next: 8},
-    {state: BOSS3_STATE.STUNNED_LIGHT, next: 9},
-    {state: BOSS3_STATE.ATTACK_OR_SPAWN, next: 10},
-    {state: BOSS3_STATE.STUNNED_LIGHT, next: 3},
+	{state: BOSS3_STATE.FLY_TO_RANDOM, next: 8},
+	{state: BOSS3_STATE.FLY_TO_RANDOM, next: 9},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 10},
+    {state: BOSS3_STATE.MOVE_RIGHT, next: 11},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 12},
+    {state: BOSS3_STATE.PARABOLA_RL, next: 13},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 14},
+    {state: BOSS3_STATE.ATTACK_OR_SPAWN, next: 15},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 16},
+	{state: BOSS3_STATE.FLY_TO_RANDOM, next: 17},
+	{state: BOSS3_STATE.FLY_TO_RANDOM, next: 18},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 19},
+    {state: BOSS3_STATE.MOVE_LEFT, next: 20},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 5},
 ];
 
 pattern_index = 0;  // Текущая нода
@@ -59,6 +72,7 @@ pattern_index = 0;  // Текущая нода
 // SPAWN
 spawn_offset_x = 24;
 spawn_offset_y = +8;
+spawn_ready = false;  // Спавн разрешён со второго раза
 
 // MOVE
 move_speed = 3;
@@ -73,9 +87,26 @@ parabola_duration = 60 * 2.5;
 parabola_timer = 0;
 parabola_lr_end_x = room_width - 64;
 parabola_rl_end_x = 64;
+// Стрельба во время параболы
+parabola_shoot_start_x = 128;              // Начинает стрелять после этой X
+parabola_shoot_end_x = room_width - 128;   // Заканчивает стрелять до этой X
+parabola_shoot_interval = 1;              // Кадров между выстрелами
+parabola_shoot_timer = 0;
+parabola_shooting = false;                 // Стреляет ли сейчас
+
+// FLY_TO_RANDOM
+fly_target_x = 0;
+fly_target_y = 0;
+fly_speed = 2;
+fly_shooting = false;
+fly_shoot_timer = 0;
+fly_shoot_duration = 60 * 0.75;  // 0.75 секунды
+fly_shoot_interval = 1;          // Интервал между выстрелами
+fly_shoot_cooldown = 0;
+fly_shoot_offset = 32;           // Смещение точек стрельбы от центра
 
 // STUNNED
-stunned_light_duration = 60 * 0.5; 
+stunned_light_duration = 60 * 1; 
 stunned_heavy_duration = 60 * 2;
 
 // === ФУНКЦИИ ===
@@ -104,6 +135,22 @@ shoot_down = function() {
 	shoot(x, y-32)
 }
 
+shoot_smart = function() {
+	var half = room_width / 2;
+	var boss_left = (x < half);
+	var player_left = (oPlayer.x < half);
+    
+	if (boss_left == player_left) {
+		// В одной половине — стреляем по бокам
+		shoot_left();
+		shoot_right();
+	} else {
+		// В разных половинах — стреляем вверх/вниз
+		shoot_up();
+		shoot_down();
+	}
+}
+
 shoot_functions = [shoot_left, shoot_right, shoot_up, shoot_down];
 
 /// Переход к следующей ноде по паттерну
@@ -128,14 +175,14 @@ boss_change_state = function() {
             break;
             
         case BOSS3_STATE.MOVE_LEFT:
-            hsp = -move_speed;
-            vsp = 0;
-            break;
-            
-        case BOSS3_STATE.MOVE_RIGHT:
-            hsp = move_speed;
-            vsp = 0;
-            break;
+		    fly_target_x = parabola_rl_end_x;
+		    fly_target_y = start_y;
+		    break;
+    
+		case BOSS3_STATE.MOVE_RIGHT:
+		    fly_target_x = parabola_lr_end_x;
+		    fly_target_y = start_y;
+		    break;
             
         case BOSS3_STATE.PARABOLA_LR:
             parabola_start_x = x;
@@ -184,18 +231,25 @@ boss_change_state = function() {
             vsp = 0;
 
             if (instance_number(oFatherSmall) < 2) {
-		        var spawn1 = instance_create_layer(x - spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
-		        spawn1.facing = -1;
-		        var spawn2 = instance_create_layer(x + spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
-		        spawn2.facing = 1;
-		        shoot_functions = array_shuffle(shoot_functions);
-		        shoot_functions[0]();
-		    } else {
-		        shoot_functions = array_shuffle(shoot_functions);
-		        shoot_functions[0]();
-		        shoot_functions[1]();
-		    }
-            break;
+			    if (spawn_ready) {
+			        // Второй+ раз — спавним
+			        var spawn1 = instance_create_layer(x - spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
+			        spawn1.facing = -1;
+			        var spawn2 = instance_create_layer(x + spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
+			        spawn2.facing = 1;
+			        spawn_ready = false;  
+			    } else {
+			        spawn_ready = true;
+					shoot_smart()
+			    }
+			} else {
+			    spawn_ready = false; 
+			    shoot_smart()
+			}
+		case BOSS3_STATE.FLY_TO_RANDOM:
+			fly_target_x = irandom_range(55, 262);
+			fly_target_y = irandom_range(16+40, 64);
+			break;
     }
 }
 

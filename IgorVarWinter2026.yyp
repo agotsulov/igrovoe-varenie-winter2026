@@ -38,6 +38,7 @@
     {"id":{"name":"oEnemy","path":"objects/oEnemy/oEnemy.yy",},},
     {"id":{"name":"oFatherSmall","path":"objects/oFatherSmall/oFatherSmall.yy",},},
     {"id":{"name":"oFinalApproacher","path":"objects/oFinalApproacher/oFinalApproacher.yy",},},
+    {"id":{"name":"oHomingProjectile","path":"objects/oHomingProjectile/oHomingProjectile.yy",},},
     {"id":{"name":"oPhase1Approacher","path":"objects/oPhase1Approacher/oPhase1Approacher.yy",},},
     {"id":{"name":"oPhase2Approacher","path":"objects/oPhase2Approacher/oPhase2Approacher.yy",},},
     {"id":{"name":"oPickable","path":"objects/oPickable/oPickable.yy",},},
