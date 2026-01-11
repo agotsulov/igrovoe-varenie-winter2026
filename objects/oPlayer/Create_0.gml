@@ -116,8 +116,23 @@ pickup = function () {
     if (item != noone) {
         inventory = item.object_index;
 		audio_play_sound(sfxGrabSuccess, 1, 0, 1.5)
-        instance_destroy(item,false);
+        instance_destroy(item, false);
     }
+	
+	// Мешком убивать отцов 
+	// Но так слишком легко, можно тупо стоять на одно месте
+	/*
+	var fathersmall = collision_rectangle(
+        check_x - half_w, check_y - half_h,
+        check_x + half_w, check_y + half_h,
+        oFatherSmall, false, true
+    );
+	
+	if (fathersmall != noone) {
+      	audio_play_sound(sfxGrabSuccess, 1, 0, 1.5)
+        instance_destroy(fathersmall);
+    }
+	*/
 }
 
 function trigger_hurt_animation() {

@@ -1,7 +1,7 @@
 // CREATE oBoss3
 event_inherited()
 
-max_hp = 1;
+max_hp = 8;
 hp = max_hp;
 facing = 1;
 
@@ -19,34 +19,46 @@ delta_y = 0;
 // FSM
 enum BOSS3_STATE {
     IDLE,
-    CHASE,
     SPAWN,
     MOVE_LEFT,
     MOVE_RIGHT,
     PARABOLA_LR,
     PARABOLA_RL,
-    STUNNED,
+    STUNNED_LIGHT,
+    STUNNED_HEAVY,
+    ATTACK, 
+	ATTACK_OR_SPAWN,
 }
 
 state = BOSS3_STATE.IDLE;
-state_timer = 0;
+state_timer = 60;
 
-// Только для STUNNED — куда идти после стана
-stunned_next_state = BOSS3_STATE.IDLE;
+// ==============================
+// === ПАТТЕРН ПОВЕДЕНИЯ БОССА ===
+// ==============================
+// Каждая нода: {state, next}
+boss_pattern = [
+    {state: BOSS3_STATE.IDLE, next: 1},
+    {state: BOSS3_STATE.MOVE_LEFT, next: 2},
+    {state: BOSS3_STATE.ATTACK, next: 3},
+    {state: BOSS3_STATE.PARABOLA_LR, next: 4},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 5},
+    {state: BOSS3_STATE.ATTACK_OR_SPAWN, next: 6},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 7},
+    {state: BOSS3_STATE.PARABOLA_RL, next: 8},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 9},
+    {state: BOSS3_STATE.ATTACK_OR_SPAWN, next: 10},
+    {state: BOSS3_STATE.STUNNED_LIGHT, next: 3},
+];
+
+pattern_index = 0;  // Текущая нода
 
 // === НАСТРОЙКИ ===
 
-idle_delay = 60;
-
-// CHASE
-chase_acceleration = 0.3;
-chase_max_speed = 4;
-chase_duration = 180;
-chase_y_offset = -48;
 
 // SPAWN
-spawn_offset_x = 48;
-spawn_offset_y = 0;
+spawn_offset_x = 24;
+spawn_offset_y = +8;
 
 // MOVE
 move_speed = 3;
@@ -56,26 +68,55 @@ parabola_start_x = 0;
 parabola_start_y = 0;
 parabola_end_x = 0;
 parabola_end_y = 0;
-parabola_height = 80;
-parabola_duration = 120;
+parabola_height = 32;
+parabola_duration = 60 * 2.5;
 parabola_timer = 0;
 parabola_lr_end_x = room_width - 64;
 parabola_rl_end_x = 64;
 
+// STUNNED
+stunned_light_duration = 60 * 0.5; 
+stunned_heavy_duration = 60 * 2;
+
 // === ФУНКЦИИ ===
 
-boss_change_state = function(_new_state) {
+shoot = function(start_x, start_y, proj_speed = 2) {
+	if (instance_exists(oPlayer)) {
+		var dir = point_direction(start_x, start_y, oPlayer.x, oPlayer.y);
+        dir += irandom_range(-4, 4); // чтобы он не точно в игрока бил всегда
+		var proj = instance_create_layer(start_x, start_y, "Instances_1", oRock);
+		proj.hsp = lengthdir_x(1, dir);
+		proj.vsp = lengthdir_y(1, dir);
+		proj.sp = proj_speed
+	}
+}
+
+shoot_left = function() {
+	shoot(x-32, y)
+}
+shoot_right = function() {
+	shoot(x+32, y)
+}
+shoot_up = function() {
+	shoot(x, y+32)
+}
+shoot_down = function() {
+	shoot(x, y-32)
+}
+
+shoot_functions = [shoot_left, shoot_right, shoot_up, shoot_down];
+
+/// Переход к следующей ноде по паттерну
+boss_change_state = function() {
+    pattern_index = boss_pattern[pattern_index].next;
+    var _new_state = boss_pattern[pattern_index].state;
+    
     state = _new_state;
     
     switch (_new_state) {
         case BOSS3_STATE.IDLE:
-            state_timer = idle_delay;
             hsp = 0;
             vsp = 0;
-            break;
-            
-        case BOSS3_STATE.CHASE:
-            state_timer = chase_duration;
             break;
             
         case BOSS3_STATE.SPAWN:
@@ -115,14 +156,48 @@ boss_change_state = function(_new_state) {
             hsp = 0;
             vsp = 0;
             break;
+		
+		case BOSS3_STATE.STUNNED_LIGHT:
+            state_timer = stunned_light_duration;
+            hsp = 0;
+            vsp = 0;
+            break;
+            
+        case BOSS3_STATE.STUNNED_HEAVY:
+            state_timer = stunned_heavy_duration;
+            hsp = 0;
+            vsp = 0;
+            break;
+			
+		case BOSS3_STATE.ATTACK:
+			state_timer = 30;
+            hsp = 0;
+            vsp = 0;
+			zshoot_functions = array_shuffle(shoot_functions);
+			shoot_functions[0]();
+			shoot_functions[1]();
+            break;
+			
+		case BOSS3_STATE.ATTACK_OR_SPAWN:
+			state_timer = 30;
+            hsp = 0;
+            vsp = 0;
+
+            if (instance_number(oFatherSmall) < 2) {
+		        var spawn1 = instance_create_layer(x - spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
+		        spawn1.facing = -1;
+		        var spawn2 = instance_create_layer(x + spawn_offset_x, y + spawn_offset_y, layer, oFatherSmall);
+		        spawn2.facing = 1;
+		        shoot_functions = array_shuffle(shoot_functions);
+		        shoot_functions[0]();
+		    } else {
+		        shoot_functions = array_shuffle(shoot_functions);
+		        shoot_functions[0]();
+		        shoot_functions[1]();
+		    }
+            break;
     }
 }
 
-// Стан: duration в кадрах, after куда после
-boss_stun = function(_duration, _after = BOSS3_STATE.IDLE) {
-    state = BOSS3_STATE.STUNNED;
-    state_timer = _duration;
-    stunned_next_state = _after;
-    hsp = 0;
-    vsp = 0;
-}
+
+
